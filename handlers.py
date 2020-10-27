@@ -27,7 +27,7 @@ class CommandHandler(tornado.web.RequestHandler):
         else:
             self.write(json.dumps({
                 'code': 0,
-                'command': command,
+                'command': command.decode(),
             }))
 
     def post(self, *args, **kwargs):
@@ -67,7 +67,7 @@ class ReturnHandler(tornado.web.RequestHandler):
         else:
             self.write(json.dumps({
                 'code': 0,
-                'return': ret,
+                'return': ret.decode(),
             }))
 
     def post(self, *args, **kwargs):
