@@ -2,3 +2,5 @@ venv/
 log/
 *.log
 test/
+.idea/
+__pycache__/
