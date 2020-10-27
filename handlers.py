@@ -31,15 +31,21 @@ class CommandHandler(tornado.web.RequestHandler):
             }))
 
     def post(self, *args, **kwargs):
-        payload = json.loads(str(self.request.body, 'utf-8'))
-        command = payload['command']
-        self.log.info("before lpush", self.command_key, command)
-        self.r.lpush(self.command_key, command)
-        self.log.info("after lpush", self.command_key, command)
-        self.write(json.dumps({
-            'code': 0,
-            'data': 0,
-        }))
+        command = self.get_argument('command', None)
+        if command:
+            self.log.info("before lpush", self.command_key, command)
+            self.r.lpush(self.command_key, command)
+            self.log.info("after lpush", self.command_key, command)
+            self.write(json.dumps({
+                'code': 0,
+                'data': 0,
+            }))
+        else:
+            self.write(json.dumps({
+                'code': -1,
+                'data': -1,
+            }))
+
 
 
 class ReturnHandler(tornado.web.RequestHandler):
@@ -65,12 +71,18 @@ class ReturnHandler(tornado.web.RequestHandler):
             }))
 
     def post(self, *args, **kwargs):
-        payload = json.loads(str(self.request.body, 'utf-8'))
-        ret = payload['return']
-        self.log.info("before lpush", self.return_key, ret)
-        self.r.lpush(self.return_key, ret)
-        self.log.info("after lpush", self.return_key, ret)
-        self.write(json.dumps({
-            'code': 0,
-            'data': 0,
-        }))
+        ret = self.get_argument("return", None)
+        if ret:
+            self.log.info("before lpush", self.return_key, ret)
+            self.r.lpush(self.return_key, ret)
+            self.log.info("after lpush", self.return_key, ret)
+            self.write(json.dumps({
+                'code': 0,
+                'data': 0,
+            }))
+        else:
+            self.write(json.dumps({
+                'code': -1,
+                'data': -1,
+            }))
+
